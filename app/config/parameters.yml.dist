@@ -38,5 +38,8 @@ parameters:
     deploy_username:   vagrant
     deploy_password:   vagrant
 
+#HWIOAuth stuff
 
+    github_client_id: 'ADD_HERE'
+    github_client_secret: 'ADD_HERE'
 

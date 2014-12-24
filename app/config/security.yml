@@ -15,7 +15,8 @@ security:
             logout:       true
             anonymous:    true
             oauth:
-                resource_owners: ~
+                resource_owners:
+                    github:          "/connect/check-github"
                 login_path:        /login
                 use_forward:       false
                 failure_path:      /login
