@@ -6,47 +6,17 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class FOSUBUserProvider extends BaseClass
 {
-
-    /**
-     * {@inheritDoc}
-     */
-    public function notUsedConnect(UserInterface $user, UserResponseInterface $response)
-    {
-        throw new \Exception('THIS CODE IS ACTUALLY USED???');
-
-        $property = $this->getProperty($response);
-        $username = $response->getUsername();
-
-        //on connect - get the access token and the user ID
-        $service = $response->getResourceOwner()->getName();
-
-        $setter      = 'set' . ucfirst($service);
-        $setterId    = $setter . 'Id';
-        $setterToken = $setter . 'AccessToken';
-
-        $previousUser = $this->userManager->findUserBy(array($property => $username));
-        //we "disconnect" previously connected users
-        if (null !== $previousUser) {
-            $previousUser->$setterId(null);
-            $previousUser->$setterToken(null);
-            $this->userManager->updateUser($previousUser);
-        }
-
-        //we connect current user
-        $user->$setterId($username);
-        //$user->$setterToken($response->getAccessToken());
-
-        $this->userManager->updateUser($user);
-    }
 
     /**
      * {@inheritdoc}
      */
     public function loadUserByoAuthUserResponse(UserResponseInterface $response)
     {
+
         $username = $response->getUsername();
 
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
@@ -58,21 +28,22 @@ class FOSUBUserProvider extends BaseClass
         //if user exists - go with the HWIOAuth way
         $user = parent::loadUserByOAuthUserResponse($response);
 
-        //$serviceName = $response->getResourceOwner()->getName();
+        $serviceName = $response->getResourceOwner()->getName();
 
-        //$setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
 
         //update access token
         // do not set access token due to security concerns
-        //$user->$setter($response->getAccessToken());
+        $user->$setter($response->getAccessToken());
         return $user;
     }
 
     protected function doRegistration($response)
     {
         $identifier = $response->getUsername();
-        $email      = $response->getEmail();
-        $username   = $response->getNickname();
+        $email = $response->getEmail();
+        $username = $response->getNickname();
+        $profileName = $response->getRealName();
 
         // Check that user with same e-mail doesn't already exist
         if (null !== $this->userManager->findUserBy(array('email' => $email))) {
@@ -87,24 +58,24 @@ class FOSUBUserProvider extends BaseClass
         }
 
         //when the user is registering.
-        $service  = $response->getResourceOwner()->getName();
-        $setter   = 'set' . ucfirst($service);
+        $service = $response->getResourceOwner()->getName();
+        $setter = 'set' . ucfirst($service);
         $setterId = $setter . 'Id';
-        //$setterToken = $setter . 'AccessToken';
+        $setterToken = $setter . 'AccessToken';
 
         // create new user here
         $user = $this->userManager->createUser();
 
         $user->$setterId($identifier);
 
-        // do not set access token due to security concerns
-        //$user->$setterToken($response->getAccessToken());
+        $user->$setterToken($response->getAccessToken());
 
         //I have set all requested data with the user's username
         //modify here with relevant data
         $user->setUsername($username);
         $user->setEmail($email);
         $user->setPlainPassword(uniqid());
+        $user->setProfileName($profileName);
         $user->setEnabled(true);
         $this->userManager->updateUser($user);
 
