@@ -40,3 +40,6 @@ fos_user_change_password:
 
 github_login:
     pattern: /connect/check-github
+
+trello_login:
+    pattern: /connect/check-trello

@@ -6,6 +6,11 @@ hwi_oauth:
             client_id:           %github_client_id%
             client_secret:       %github_client_secret%
             scope:               "user:email,public_repo"
+        trello:
+            type:                trello
+            client_id:           %trello_client_id%
+            client_secret:       %trello_client_secret%
+            scope:               "read,write"
     fosub:
         # try 30 times to check if a username is available (foo, foo1, foo2 etc)
         username_iterations: 30
@@ -13,6 +18,7 @@ hwi_oauth:
         # mapping between resource owners (see below) and properties
         properties:
             github: githubId
+            trello: trelloId
             google: googleId
             facebook: facebookId
             my_custom_provider: customId

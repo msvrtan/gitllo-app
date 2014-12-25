@@ -46,8 +46,14 @@ class User extends BaseUser
     /** @ORM\Column(name="githubId", type="string", length=255, nullable=true, unique=true) */
     protected $githubId;
 
-    /** @ORM\Column(name="githubAccessToken", type="string", length=255, nullable=true, unique=true) */
+    /** @ORM\Column(name="githubAccessToken", type="string", length=255, nullable=true) */
     protected $githubAccessToken;
+
+    /** @ORM\Column(name="trelloId", type="string", length=255, nullable=true, unique=true) */
+    protected $trelloId;
+
+    /** @ORM\Column(name="trelloAccessToken", type="string", length=255, nullable=true) */
+    protected $trelloAccessToken;
 
     public function __construct()
     {

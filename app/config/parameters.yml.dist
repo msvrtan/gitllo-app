@@ -42,4 +42,6 @@ parameters:
 
     github_client_id: 'ADD_HERE'
     github_client_secret: 'ADD_HERE'
+    trello_client_id: 'ADD_HERE'
+    trello_client_secret: 'ADD_HERE'
 
