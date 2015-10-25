@@ -46,13 +46,13 @@ class User extends BaseUser
     /** @ORM\Column(name="githubId", type="string", length=255, nullable=true, unique=true) */
     protected $githubId;
 
-    /** @ORM\Column(name="githubAccessToken", type="string", length=255, nullable=true) */
+    /** @ORM\Column(name="githubAccessToken", type="string", length=255, nullable=true, unique=true) */
     protected $githubAccessToken;
 
     /** @ORM\Column(name="trelloId", type="string", length=255, nullable=true, unique=true) */
     protected $trelloId;
 
-    /** @ORM\Column(name="trelloAccessToken", type="string", length=255, nullable=true) */
+    /** @ORM\Column(name="trelloAccessToken", type="string", length=255, nullable=true, unique=true) */
     protected $trelloAccessToken;
 
     public function __construct()
@@ -74,7 +74,7 @@ class User extends BaseUser
 
     public function setEmailCanonical($emailCanonical)
     {
-        
+
         if (empty($emailCanonical)) {
             $emailCanonical = null;
         }
@@ -131,4 +131,40 @@ class User extends BaseUser
     {
         $this->githubAccessToken = $githubAccessToken;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTrelloId()
+    {
+        return $this->trelloId;
+    }
+
+    /**
+     * @param mixed $trelloId
+     */
+    public function setTrelloId($trelloId)
+    {
+        $this->trelloId = $trelloId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTrelloAccessToken()
+    {
+        return $this->trelloAccessToken;
+    }
+
+    /**
+     * @param mixed $trelloAccessToken
+     */
+    public function setTrelloAccessToken($trelloAccessToken)
+    {
+        $this->trelloAccessToken = $trelloAccessToken;
+    }
+
+
+
+
 }

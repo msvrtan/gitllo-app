@@ -10,7 +10,7 @@ hwi_oauth:
             type:                trello
             client_id:           %trello_client_id%
             client_secret:       %trello_client_secret%
-            scope:               "read,write"
+            scope:               "read,write,account"
     fosub:
         # try 30 times to check if a username is available (foo, foo1, foo2 etc)
         username_iterations: 30

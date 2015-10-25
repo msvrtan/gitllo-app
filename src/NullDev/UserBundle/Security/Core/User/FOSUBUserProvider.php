@@ -16,8 +16,8 @@ class FOSUBUserProvider extends BaseClass
      */
     public function loadUserByoAuthUserResponse(UserResponseInterface $response)
     {
-
         $username = $response->getUsername();
+
 
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
 
@@ -40,16 +40,20 @@ class FOSUBUserProvider extends BaseClass
 
     protected function doRegistration($response)
     {
+
         $identifier = $response->getUsername();
         $email = $response->getEmail();
         $username = $response->getNickname();
         $profileName = $response->getRealName();
 
-        // Check that user with same e-mail doesn't already exist
-        if (null !== $this->userManager->findUserBy(array('email' => $email))) {
-            throw new AccountNotLinkedException(
-                "E-mail is already connected to another account. Please login and press connect."
-            );
+
+        if (!empty($email)) {
+            // Check that user with same e-mail doesn't already exist
+            if (null !== $this->userManager->findUserBy(array('email' => $email))) {
+                throw new AccountNotLinkedException(
+                    "E-mail is already connected to another account. Please login and press connect."
+                );
+            }
         }
 
         // Check that this nickname is not already used, if is add timestamp at the end
@@ -77,6 +81,7 @@ class FOSUBUserProvider extends BaseClass
         $user->setPlainPassword(uniqid());
         $user->setProfileName($profileName);
         $user->setEnabled(true);
+
         $this->userManager->updateUser($user);
 
         return $user;
